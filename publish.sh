@@ -1,7 +1,10 @@
 #!/bin/sh
 
-FILENAME=$1
+GIVEN_PATH=$1
 FORMAT=$2
+
+BASENAME=${GIVEN_PATH##*/}
+FILENAME="${BASENAME%%.*}"
 
 if [ -z "$FILENAME" ]; then
   exit 1
