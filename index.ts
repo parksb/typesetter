@@ -18,11 +18,10 @@ interface Document {
 }
 
 (async () => {
-  const filename = process.argv.slice(2)[0];
+  const TEMPLATE_PATH: Buffer = await fs.readFile(path.join(__dirname, './templates/default.ejs'));
 
-  const MARKDOWN_DIRECTORY_PATH: string = path.join(__dirname, './md');
-  const DIST_DIRECTORY_PATH: string = path.join(__dirname, './html');
-  const TEMPLATE_FILE_PATH: Buffer = await fs.readFile(path.join(__dirname, './templates/default.ejs'));
+  const inputpath = process.argv[2];
+  const outputpath = process.argv[3];
 
   const md: MarkdownIt = new MarkdownIt({
     html: false,
@@ -49,12 +48,12 @@ interface Document {
     })
     .use(mdAnchor);
 
-    const markdown = (await fs.readFile(`${MARKDOWN_DIRECTORY_PATH}/${filename}.md`)).toString();
+    const markdown = (await fs.readFile(inputpath)).toString();
     const html = md.render(markdown);
 
     const document: Document = { title: markdown.match(/^#\s.*/)[0].replace(/^#\s/, ''), html };
 
-    fs.writeFile(`${DIST_DIRECTORY_PATH}/${filename}.html`, ejs.render(String(TEMPLATE_FILE_PATH), { document }));
+    fs.writeFile(outputpath, ejs.render(String(TEMPLATE_PATH), { document }));
 })();
 
 

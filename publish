@@ -1,0 +1,28 @@
+#!/bin/sh
+
+FORMAT=$1
+GIVEN_PATH=$2
+
+CURRENTPATH=$(pwd)
+BASEPATH=$(dirname "$CURRENTPATH/$GIVEN_PATH")
+BASENAME=$(basename "$GIVEN_PATH")
+FILENAME=${BASENAME%%.*}
+
+if [ -z "$BASEPATH" ]; then
+  exit 1
+fi
+
+cd "$TYPESETTER_PATH" || exit 1
+
+if [ "$FORMAT" = "html" ]; then
+  echo "> HTML"
+  npm run build -- "$BASEPATH/$FILENAME.md" "$CURRENTPATH/$FILENAME.html"
+elif [ "$FORMAT" = "pdf" ]; then
+  echo "> PDF"
+  mkdir -p tmp
+  npm run build -- "$BASEPATH/$FILENAME.md" "tmp/$FILENAME.tmp.html"
+  wkhtmltopdf -L 26 -R 26 -T 26 -B 26 "tmp/$FILENAME.tmp.html" "$CURRENTPATH/$FILENAME.pdf"
+  rm -f "tmp/$FILENAME.tmp.html"
+else
+  echo "Unknown format: $FORMAT"
+fi
