@@ -1,0 +1,30 @@
+#!/bin/sh
+
+FORMAT=$1
+GIVEN_INPUT_FILEPATH=$2
+GIVEN_OUTPUT_FILEPATH=$3
+
+INPUT_FILEPATH=$(realpath "$GIVEN_INPUT_FILEPATH")
+INPUT_FILENAME=${INPUT_PATH%%.*}
+
+if [ -z "$GIVEN_OUTPUT_FILEPATH" ]; then
+  CURRENTPATH=$(pwd)
+  OUTPUT_FILEPATH=$(realpath "$CURRENTPATH/$INPUT_FILENAME.$FORMAT")
+else
+  OUTPUT_FILEPATH=$(realpath "$GIVEN_OUTPUT_FILEPATH")
+fi
+
+cd "$TYPESETTER_PATH/build" || exit 1
+
+if [ "$FORMAT" = "html" ]; then
+  echo "> HTML"
+  node index.js "$INPUT_FILEPATH" "$OUTPUT_FILEPATH"
+elif [ "$FORMAT" = "pdf" ]; then
+  echo "> PDF"
+  mkdir -p tmp
+  node index.js "$INPUT_FILEPATH" "tmp/$INPUT_FILENAME.tmp.html"
+  wkhtmltopdf -L 26 -R 26 -T 26 -B 26 "tmp/$INPUT_FILENAME.tmp.html" "$OUTPUT_FILEPATH"
+  rm -f "tmp/$INPUT_FILENAME.tmp.html"
+else
+  echo "Unknown format: $FORMAT"
+fi
