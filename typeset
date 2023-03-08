@@ -1,15 +1,19 @@
 #!/bin/sh
 
-FORMAT=$1
-GIVEN_INPUT_FILEPATH=$2
-GIVEN_OUTPUT_FILEPATH=$3
+while getopts "f:t:o:" opt; do
+  case $opt in
+    f) FORMAT=$OPTARG;;                # format
+    t) GIVEN_INPUT_FILEPATH=$OPTARG;;  # target
+    o) GIVEN_OUTPUT_FILEPATH=$OPTARG;; # output
+    *) echo "Unknown option: $opt"; exit 1;;
+  esac
+done
 
 INPUT_FILEPATH=$(realpath "$GIVEN_INPUT_FILEPATH")
-INPUT_FILENAME=${INPUT_PATH%%.*}
+INPUT_FILENAME=$(basename "$INPUT_FILEPATH" ".md")
 
 if [ -z "$GIVEN_OUTPUT_FILEPATH" ]; then
-  CURRENTPATH=$(pwd)
-  OUTPUT_FILEPATH=$(realpath "$CURRENTPATH/$INPUT_FILENAME.$FORMAT")
+  OUTPUT_FILEPATH=$(realpath "$(pwd)/$INPUT_FILENAME.$FORMAT")
 else
   OUTPUT_FILEPATH=$(realpath "$GIVEN_OUTPUT_FILEPATH")
 fi
