@@ -31,9 +31,9 @@ interface Document {
     linkify: true,
     typographer: true,
     quotes: '“”‘’',
-    highlight: (str, lang) => {
-      if (lang && highlightJs.getLanguage(lang)) {
-        return `<pre class="hljs"><code>${highlightJs.highlight(lang, str, true).value}</code></pre>`;
+    highlight: (str, language) => {
+      if (language && highlightJs.getLanguage(language)) {
+        return `<pre class="hljs"><code>${highlightJs.highlight(str, { language, ignoreIllegals: true }).value}</code></pre>`;
       }
       return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
     },
