@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 
 import MarkdownIt from 'markdown-it';
-import * as katex from 'katex';
+import katex from 'katex';
 import highlightJs from 'highlight.js';
 import mdFootnote from 'markdown-it-footnote';
 import mdTex from 'markdown-it-texmath';
