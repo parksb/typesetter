@@ -1,9 +1,10 @@
 #!/bin/sh
 
-while getopts "f:t:o:" opt; do
+GIVEN_INPUT_FILEPATH=$1
+
+while getopts "f:o:" opt; do
   case $opt in
     f) FORMAT=$OPTARG;;                # format
-    t) GIVEN_INPUT_FILEPATH=$OPTARG;;  # target
     o) GIVEN_OUTPUT_FILEPATH=$OPTARG;; # output
     *) echo "Unknown option: $opt"; exit 1;;
   esac
@@ -11,6 +12,10 @@ done
 
 INPUT_FILEPATH=$(realpath "$GIVEN_INPUT_FILEPATH")
 INPUT_FILENAME=$(basename "$INPUT_FILEPATH" ".md")
+
+if [ -z "$FORMAT" ]; then
+  FORMAT="html"
+fi
 
 if [ -z "$GIVEN_OUTPUT_FILEPATH" ]; then
   OUTPUT_FILEPATH=$(realpath "$(pwd)/$INPUT_FILENAME.$FORMAT")
