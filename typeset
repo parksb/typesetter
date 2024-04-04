@@ -18,9 +18,9 @@ if [ -z "$FORMAT" ]; then
 fi
 
 if [ -z "$GIVEN_OUTPUT_FILEPATH" ]; then
-  OUTPUT_FILEPATH=$(realpath "$(pwd)/$INPUT_FILENAME.$FORMAT")
+  OUTPUT_FILEPATH="$(pwd)/$INPUT_FILENAME.$FORMAT"
 else
-  OUTPUT_FILEPATH=$(realpath "$GIVEN_OUTPUT_FILEPATH")
+  OUTPUT_FILEPATH="$GIVEN_OUTPUT_FILEPATH"
 fi
 
 cd "$TYPESETTER_PATH/build" || exit 1
