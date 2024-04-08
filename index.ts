@@ -11,6 +11,7 @@ import mdAnchor from 'markdown-it-anchor';
 import mdInlineComment from 'markdown-it-inline-comments';
 import mdEmoji from 'markdown-it-emoji';
 import mdMermaid from 'markdown-it-mermaid';
+import mdContainer from 'markdown-it-container';
 
 interface Document {
   title: string;
@@ -46,7 +47,19 @@ interface Document {
       delimiters: 'dollars',
       macros: { '\\RR': '\\mathbb{R}' },
     })
-    .use(mdAnchor);
+    .use(mdAnchor)
+    .use(mdContainer, 'TOGGLE', {
+      validate(params) {
+        return params.trim().match(/^TOGGLE\s+(.*)$/);
+      },
+      render(tokens, idx) {
+        const content = tokens[idx].info.trim().match(/^TOGGLE\s+(.*)$/);
+        if (tokens[idx].nesting === 1) {
+          return `<details><summary>${md.utils.escapeHtml(content[1])}</summary>\n`;
+        }
+        return '</details>\n';
+      },
+    });
 
     const markdown = (await fs.readFile(inputpath)).toString();
     const html = md.render(markdown);

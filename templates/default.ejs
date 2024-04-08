@@ -49,6 +49,9 @@
     .footnotes > .footnotes-list > .footnote-item { list-style-position: inherit; list-style: none; }
     .footnotes > .footnotes-list > .footnote-item:before { content: "[" counter(list) "] "; counter-increment: list; }
     .footnotes > .footnotes-list > .footnote-item > p { display: inline; }
+    details > p { margin: 0; }
+    details[open=""] > p { border-left: black 1px solid; padding-left: 15px; margin-left: 3.5px; }
+    summary { cursor: pointer; }
   </style>
 </head>
 
